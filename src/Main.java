@@ -25,27 +25,29 @@ public class Main {
         File dirGunRunner = new File("C://Games//savegames", "GunRunner");
         dirGunRunner.mkdir();
 
-        String saveAdress1 = DIR_NAME + FILE_NAME1;
-        String saveAdress2 = DIR_NAME + FILE_NAME2;
-        String saveAdress3 = DIR_NAME + FILE_NAME3;
+        String saveAdress1 = FILE_NAME1;
+        String saveAdress2 = FILE_NAME2;
+        String saveAdress3 = FILE_NAME3;
 
         List<String> listFiles = new ArrayList();
         listFiles.add(saveAdress1);
         listFiles.add(saveAdress2);
         listFiles.add(saveAdress3);
 
-        saveGame(saveAdress1, gameProgress1);
-        saveGame(saveAdress2, gameProgress2);
-        saveGame(saveAdress3, gameProgress3);
+        saveGame(DIR_NAME + saveAdress1, gameProgress1);
+        saveGame(DIR_NAME + saveAdress2, gameProgress2);
+        saveGame(DIR_NAME + saveAdress3, gameProgress3);
 
         zipFiles(ZIP_NAME, listFiles);   //создание ZIP- архива в папке - "savegames"
 
-        fileDelete(listFiles.get(0));
-        fileDelete(listFiles.get(1));
-        fileDelete(listFiles.get(2));
+        fileDelete(DIR_NAME + listFiles.get(0));
+        fileDelete(DIR_NAME + listFiles.get(1));
+        fileDelete(DIR_NAME + listFiles.get(2));
 
         openZip(ZIP_NAME, NEW_DIR_NAME);  // распаковка в другой папке - "res"
+        System.out.println(openProgress(NEW_DIR_NAME + FILE_NAME1));
         System.out.println(openProgress(NEW_DIR_NAME + FILE_NAME2));
+        System.out.println(openProgress(NEW_DIR_NAME + FILE_NAME3));
     }
 
 
@@ -70,10 +72,10 @@ public class Main {
     }
 
 
-    public static void zipFiles(String zipFail, List<String> list) {
-        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFail))) {
+    public static void zipFiles(String zipName, List<String> list) {
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipName))) {
             for (String listFile1 : list) {
-                try (FileInputStream fis = new FileInputStream(listFile1)) {
+                try (FileInputStream fis = new FileInputStream(DIR_NAME + listFile1)) {
                     ZipEntry entry = new ZipEntry(listFile1);
                     zos.putNextEntry(entry);
                     byte[] buffer = new byte[fis.available()];
